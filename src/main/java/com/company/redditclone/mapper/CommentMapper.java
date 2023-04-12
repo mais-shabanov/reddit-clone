@@ -1,0 +1,24 @@
+package com.company.redditclone.mapper;
+
+import com.company.redditclone.dto.CommentDto;
+import com.company.redditclone.model.Comment;
+import com.company.redditclone.model.Post;
+import com.company.redditclone.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+
+@Mapper(componentModel = "spring")
+public interface CommentMapper {
+
+    @Mapping(target = "text", source = "commentDto.text")
+    @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "post", source = "post")
+    @Mapping(target = "user", source = "user")
+    Comment map(CommentDto commentDto, Post post, User user);
+
+    @Mapping(target = "commentId", expression = "java(comment.getId())")
+    @Mapping(target = "postId", expression = "java(comment.getPost().getPostId())")
+    @Mapping(target = "username", expression = "java(comment.getUser().getUsername())")
+    CommentDto mapToDto(Comment comment);
+}
